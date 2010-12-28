@@ -15,13 +15,7 @@ OS=\`uname -s\`
 if [ "\$OS" == "Darwin" ] ; then
   DYLD_LIBRARY_PATH=${ROSJAVA_BASE_DIR}/bin:$4:\$DYLD_LIBRARY_PATH java -classpath $1 $2 ${@:5} \$@
 else
-  LIBJSIG=\`find \$JAVA_HOME/jre/lib/ -maxdepth 2 -name "libjsig.so"\`
-  if [ -z "\$LIBJSIG" ]; then
-    echo "Cannot find libjsig ... maybe you need to set JAVA_HOME?"
-    exit 1
-  fi
-
-  LD_PRELOAD=$5:\$LIBJSIGL:\$LD_PRELOAD LD_LIBRARY_PATH=${ROSJAVA_BASE_DIR}/bin:$4:\$LD_LIBRARY_PATH java -classpath $1:\$CLASSPATH $2 ${@:6} \$@
+  LD_PRELOAD=$5:\$LD_PRELOAD LD_LIBRARY_PATH=${ROSJAVA_BASE_DIR}/bin:$4:\$LD_LIBRARY_PATH java -classpath $1:\$CLASSPATH $2 ${@:6} \$@
 fi
 
 

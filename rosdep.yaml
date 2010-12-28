@@ -5,3 +5,6 @@ java:
   macports: |
   gentoo: dev-java/sun-jdk
   freebsd: openjdk6
+xmlrpc-java:
+  ubuntu: libxmlrpc3-client-java libxmlrpc3-server-java
+  debian: libxmlrpc3-client-java libxmlrpc3-server-java

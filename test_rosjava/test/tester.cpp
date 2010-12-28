@@ -33,16 +33,16 @@
 #include <ros/time.h>
 #include <ros/console.h>
 
+#include <queue>
+
 using namespace test_rosjava;
 
-int num_messages_received=0;
-std::string last_message = "";
+std::queue<std::string> received_messages;
 TestDataTypes test_in;
 
 void chatterCallback(const std_msgs::StringConstPtr& msg)
 {
-  num_messages_received++;
-  last_message = msg->data;
+  received_messages.push(msg->data);
 }
 
 void tdtCallback(const boost::shared_ptr<const TestDataTypes>& msg)
@@ -76,10 +76,11 @@ TEST(Rosjava, rosjava)
     d.sleep();
     ros::spinOnce();
     ROS_INFO_STREAM ("Have waited " << i << " out of " << wait_max << " seconds to receive a message from chatter-echo");
-    if (num_messages_received>0)
+    if (!received_messages.empty())
       break;
   }
-  EXPECT_TRUE(num_messages_received>0);
+  EXPECT_TRUE(!received_messages.empty());
+  received_messages.pop();
   ROS_INFO_STREAM ("Successfully received a startup message.");
 
   ros::Publisher pub = n.advertise<std_msgs::String>("listen", 10);
@@ -103,12 +104,12 @@ TEST(Rosjava, rosjava)
 
   d.sleep();
   ros::spinOnce();
-  num_messages_received=0;
-  while(num_messages_received == 0 && i++ < wait_max) {
+  while(received_messages.empty() && i++ < wait_max) {
 	  ros::spinOnce();
 	  d.sleep();
   }
-  EXPECT_EQ(last_message, "good"); // Result for testint params in Java
+  EXPECT_EQ(received_messages.front(), "good"); // Result for testint params in Java
+  received_messages.pop();
   ROS_INFO_STREAM("Successfully tested reading parameters");
 
   // Test parameters
@@ -138,12 +139,12 @@ TEST(Rosjava, rosjava)
   EXPECT_TRUE(service.call(req, res));
   EXPECT_EQ(res.sum, 13);
 
-  num_messages_received=0;
-  while(num_messages_received == 0 && i++ < wait_max) {
+  while(received_messages.empty() && i++ < wait_max) {
 	  ros::spinOnce();
 	  d.sleep();
   }
-  EXPECT_EQ(last_message, "good"); // Result for calling C++ service from java.
+  EXPECT_EQ(received_messages.front(), "good"); // Result for calling C++ service from java.
+  received_messages.pop();
 
   ROS_INFO_STREAM("Successfully tested services");
 
@@ -201,13 +202,13 @@ TEST(Rosjava, rosjava)
 
   pub2.publish(test);
 
-  num_messages_received=0;
-  while(num_messages_received == 0 && i++ < wait_max) {
+  while(received_messages.empty() && i++ < wait_max) {
 	  ros::spinOnce();
 	  d.sleep();
   }
-  EXPECT_EQ(num_messages_received, 1);
-  EXPECT_EQ(last_message, "good"); // Result for reading message in Java.
+  EXPECT_EQ(received_messages.size(), 1);
+  EXPECT_EQ(received_messages.front(), "good"); // Result for reading message in Java.
+  received_messages.pop();
 
   // Now, test we got things back as expected.
   EXPECT_EQ(test_in.byte_, test.byte_);

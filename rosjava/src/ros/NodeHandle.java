@@ -75,9 +75,9 @@ public abstract class NodeHandle {
 	public String  getStringParam(String param)   throws RosException {return getStringParam(param, false); }
 
 	public abstract void setParam(String param, boolean value) throws RosException;
-	public abstract void setParam(String param, int     value);
-	public abstract void setParam(String param, double  value);
-	public abstract void setParam(String param, String  value);
+	public abstract void setParam(String param, int     value) throws RosException;
+	public abstract void setParam(String param, double  value) throws RosException;
+	public abstract void setParam(String param, String  value) throws RosException;
 
 	
 	// Listing publications and subscriptions

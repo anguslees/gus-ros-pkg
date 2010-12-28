@@ -41,12 +41,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ros.communication.Time;
-import ros.roscpp.RosCpp;
+import ros.rosjava.RosJava;
 
 // Interface type to make handling multiple implementations easier
 public abstract class Ros {
     private static class SingletonHolder { 
-      private static final Ros instance = RosCpp.getInstance();
+      private static final Ros instance = RosJava.getInstance();
     }
     
     public static Ros getInstance() {return SingletonHolder.instance; }

@@ -12,7 +12,12 @@ class Testee {
 		System.out.println("Starting rosjava.");
 		Ros ros = Ros.getInstance();
 		ros.init("testNode");
-		
+
+		System.out.println("Initialized");
+		NodeHandle n = ros.createNodeHandle();
+		// Can't call Time::now() and ros.log*() until *after*
+		// the above node handle has been created.
+
 		// TODO: test these somehow?
 		ros.logDebug("DEBUG");
 		ros.logInfo("INFO");
@@ -20,11 +25,6 @@ class Testee {
 		ros.logError("ERROR");
 		ros.logFatal("FATAL");
 		
-		System.out.println("Initialized");		
-		NodeHandle n = ros.createNodeHandle();
-
-                // Can't call Time::now() until *after* the above node
-                // handle has been created.
 		System.out.println(ros.now());
 		
 		ros.pkg.std_msgs.msg.String msg = new ros.pkg.std_msgs.msg.String();
@@ -46,8 +46,12 @@ class Testee {
 		Subscriber<TestBadDataTypes> sub3 = n.subscribe("/test_bad", new TestBadDataTypes(), cb3, 10);
 		
 		System.out.println("Waiting for roscpp...");
+		for(int i = 0; i < 60 && pub.getNumSubscribers() < 1; i++) {
+			n.spinOnce();
+			Thread.sleep(1000);
+		}
+		pub.publish(msg);
 		for(int i = 0; i < 60 && cb.size() == 0; i++) {
-			pub.publish(msg);
 			n.spinOnce();
 			Thread.sleep(1000);
 		}
@@ -257,5 +261,7 @@ class Testee {
 			n.shutdown();
 		} 
 		*/		
+
+		System.exit(0);
 	}
 }

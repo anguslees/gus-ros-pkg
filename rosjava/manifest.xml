@@ -1,10 +1,17 @@
 <package>
   <description brief="A Java ROS client library">
     <p> 
-        rosjava is a partial implementation of the ROS NodeHandle API for Java. The current implementation works by calling roscpp behind the scenes using JNI, although the intention is to eventually rewrite it in pure Java. The interfaces in the "ros" package are intended to be independent of the implementation, so that this change can be made transparently when the pure Java implementation has been written.
+        rosjava is an implementation of the ROS NodeHandle API for Java.
     </p>
     <p>
         rosjava is currently in an early alpha state; the core functionality it provides has been fairly well tested, but many more advanced features are missing. Its API has not yet been reviewed, and is likely to change in the future. 
+    </p>
+    <p>
+        This implementation uses the Java apache.org XML-RPC library,
+        available from http://ws.apache.org/xmlrpc/ and assumes the
+        relevant jar files are listed in $ROSJAVA_AUX_CLASSPATH.  For
+        Debian/Ubuntu, this means:
+	export ROSJAVA_AUX_CLASSPATH=/usr/share/java/xmlrpc-client-3.1.jar:/usr/share/java/xmlrpc-server-3.1.jar:/usr/share/java/xmlrpc-common-3.1.jar:/usr/share/java/commons-logging.jar:/usr/share/java/ws-commons-util.jar:/usr/share/java/commons-httpclient.jar
     </p>
 	<p>
 		rosjava is currently maintained by Nicholas Butko. Contact nbutko at ucsd dot edu with issues and fixes. 
@@ -15,10 +22,10 @@
   <license>BSD</license>
   <review status="experimental" notes=""/>
   <depend package="roslib"/>
-  <depend package="roscpp"/>
   <depend package="roslang"/>
   <depend package="rospack"/>
   <rosdep name="java"/>
+  <rosdep name="xmlrpc-java"/>
   <export>
     <roslang cmake="${prefix}/cmake/rosjava.cmake"/>
     <java classpath="${prefix}/bin"/>
