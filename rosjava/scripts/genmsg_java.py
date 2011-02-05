@@ -46,7 +46,7 @@ from cStringIO import StringIO
 
 MSG_TYPE_TO_JAVA = {'bool': 'boolean',
                     'char': 'char',
-                    'byte': 'short',
+                    'byte': 'byte',
                     'uint8': 'short', 'int8': 'byte', 
                     'uint16': 'int', 'int16': 'short', 
                     'uint32': 'long', 'int32': 'int',
@@ -60,7 +60,7 @@ MSG_TYPE_TO_JAVA = {'bool': 'boolean',
 MSG_TYPE_TO_SERIALIZATION_CODE = {
     'bool': '%(buffer)s.put((byte)(%(name)s ? 1 : 0))',
     'char': '%(buffer)s.put((byte)%(name)s)',
-    'byte': '%(buffer)s.put((byte)%(name)s)',
+    'byte': '%(buffer)s.put(%(name)s)',
     'uint8': '%(buffer)s.put((byte)%(name)s)',
     'int8': '%(buffer)s.put(%(name)s)',
     'uint16': '%(buffer)s.putShort((short)%(name)s)',
@@ -78,7 +78,7 @@ MSG_TYPE_TO_SERIALIZATION_CODE = {
 MSG_TYPE_TO_DESERIALIZATION_CODE = {
     'bool': '%s.get() != 0 ? true : false',
     'char': '(char)(%s.get() & 0xff)',
-    'byte': '(short)(%s.get() & 0xff)',
+    'byte': '%s.get()',
     'uint8': '(short)(%s.get() & 0xff)',
     'int8': '%s.get()',
     'uint16': '(int)(%s.getShort() & 0xffff)',
