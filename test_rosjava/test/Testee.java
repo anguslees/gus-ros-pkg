@@ -171,16 +171,16 @@ class Testee {
 		
 		// Now, test the types that are still not built correctly by roscpp
 		TestBadDataTypes tbdt = new TestBadDataTypes();
-		tbdt.Byte_f[0].data = 0xfe;
-		tbdt.Byte_f[1].data = 0xcd;
+		tbdt.Byte_f[0].data = (byte)0xfe;
+		tbdt.Byte_f[1].data = (byte)0xcd;
 		tbdt.ByteMultiArray_f[0].layout.dim.add(new MultiArrayDimension());
 		tbdt.ByteMultiArray_f[0].layout.dim.get(0).label="test";
 		tbdt.ByteMultiArray_f[0].layout.dim.get(0).size=2;
 		tbdt.ByteMultiArray_f[0].layout.dim.get(0).stride=1;
     tbdt.ByteMultiArray_f[0].layout.data_offset=0;
-    tbdt.ByteMultiArray_f[0].data = new short[2];
-		tbdt.ByteMultiArray_f[0].data[0] = (short)0xab;
-		tbdt.ByteMultiArray_f[0].data[1] = (short)0xdc;
+    tbdt.ByteMultiArray_f[0].data = new byte[2];
+		tbdt.ByteMultiArray_f[0].data[0] = (byte)0xab;
+		tbdt.ByteMultiArray_f[0].data[1] = (byte)0xdc;
 
 		// Ensure we serialize and deserialize, in case roscpp does something fancy under the hood (i.e., direct transit)
 		TestBadDataTypes temp = new TestBadDataTypes();
@@ -194,8 +194,8 @@ class Testee {
 		}
 		tbdt = cb3.pop();
 		if (tbdt.Byte_f.length != 2) msg.data="fail_Byte_f_len";
-		if (tbdt.Byte_f[0].data != 0xfe) msg.data="fail_Byte_f[0]";
-		if (tbdt.Byte_f[1].data != 0xcd) msg.data="fail_Byte_f[1]";
+		if (tbdt.Byte_f[0].data != (byte)0xfe) msg.data="fail_Byte_f[0]";
+		if (tbdt.Byte_f[1].data != (byte)0xcd) msg.data="fail_Byte_f[1]";
 		if (tbdt.ByteMultiArray_f.length != 1) msg.data="fail_ByteMultiArray_f_length";
 		if (tbdt.ByteMultiArray_f[0].layout.dim.size() != 1) msg.data="fail_ByteMultiArray_f_dims";
 		if (!tbdt.ByteMultiArray_f[0].layout.dim.get(0).label.equals("test")) msg.data="fail_ByteMultiArray_f_dim[0]_label";
@@ -203,8 +203,8 @@ class Testee {
 		if (tbdt.ByteMultiArray_f[0].layout.dim.get(0).stride != 1) msg.data="fail_ByteMultiArray_f_dim[0]_stride";
 		if (tbdt.ByteMultiArray_f[0].layout.data_offset != 0) msg.data="fail_ByteMultiArray_f_data_offset";
 		if (tbdt.ByteMultiArray_f[0].data.length != 2) msg.data="fail_ByteMultiArray_f_data_length";
-		if (tbdt.ByteMultiArray_f[0].data[0] != 0xab) msg.data="fail_ByteMultiArray_f_data[0]";
-		if (tbdt.ByteMultiArray_f[0].data[1] != 0xdc) msg.data="fail_ByteMultiArray_f_data[1]";
+		if (tbdt.ByteMultiArray_f[0].data[0] != (byte)0xab) msg.data="fail_ByteMultiArray_f_data[0]";
+		if (tbdt.ByteMultiArray_f[0].data[1] != (byte)0xdc) msg.data="fail_ByteMultiArray_f_data[1]";
 		
 		System.out.println("Result of bad msg test: " + msg.data);
 		
